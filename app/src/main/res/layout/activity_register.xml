@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.register.RegisterActivity">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.intcore.internship.ecommerce.ui.register.RegisterViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/skipTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:text="@string/skip"
+                android:textColor="@color/main_text_color"
+                android:textSize="19sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/sign_up"
+                android:textColor="@color/main_text_color"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/skipTV" />
+
+            <ImageView
+                android:id="@+id/facebookLoginIV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="32dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/facebookLoginTV"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                android:src="@drawable/create_account_facebook"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"/>
+
+            <TextView
+                android:id="@+id/facebookLoginTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/facebook_cap"
+                android:textSize="16sp"
+                android:textColor="@color/navy_blue"
+                app:layout_constraintStart_toEndOf="@id/facebookLoginIV"
+                app:layout_constraintEnd_toStartOf="@id/slashTV"
+                app:layout_constraintTop_toTopOf="@id/facebookLoginIV"
+                app:layout_constraintBottom_toBottomOf="@id/facebookLoginIV"/>
+
+            <TextView
+                android:id="@+id/slashTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/slash"
+                android:textSize="16sp"
+                android:textColor="@color/navy_blue"
+                app:layout_constraintStart_toEndOf="@id/facebookLoginTV"
+                app:layout_constraintEnd_toStartOf="@id/googleLoginIV"
+                app:layout_constraintTop_toTopOf="@id/facebookLoginTV"
+                app:layout_constraintBottom_toBottomOf="@id/facebookLoginTV"/>
+
+            <ImageView
+                android:id="@+id/googleLoginIV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/create_account_google"
+                app:layout_constraintStart_toEndOf="@id/slashTV"
+                app:layout_constraintEnd_toStartOf="@id/googleLoginTV"
+                app:layout_constraintTop_toTopOf="@id/slashTV"
+                app:layout_constraintBottom_toBottomOf="@id/slashTV"/>
+
+            <TextView
+                android:id="@+id/googleLoginTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/google"
+                android:textSize="16sp"
+                android:textColor="@color/navy_blue"
+                android:layout_marginEnd="32dp"
+                app:layout_constraintStart_toEndOf="@id/googleLoginIV"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/googleLoginIV"
+                app:layout_constraintBottom_toBottomOf="@id/googleLoginIV"/>
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                app:layout_constraintEnd_toStartOf="@+id/textView4"
+                app:layout_constraintStart_toStartOf="@+id/facebookLoginIV"
+                app:layout_constraintTop_toTopOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/or"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/facebookLoginIV" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                app:layout_constraintEnd_toEndOf="@+id/googleLoginTV"
+                app:layout_constraintStart_toEndOf="@+id/textView4"
+                app:layout_constraintTop_toTopOf="@+id/textView4" />
+
+
+            <EditText
+                android:id="@+id/nameET"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="32dp"
+                android:ems="10"
+                android:hint="@string/name"
+                android:drawableStart="@drawable/selector_user_ic"
+                android:drawablePadding="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:background="@drawable/selector_edit_text_background"
+                android:inputType="textPersonName"
+                android:textColor="@color/main_text_color"
+                app:layout_constraintEnd_toEndOf="@+id/view4"
+                app:layout_constraintStart_toStartOf="@+id/view3"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <EditText
+                android:id="@+id/phoneET"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:hint="@string/phone"
+                android:drawableStart="@drawable/phone_icon"
+                android:drawablePadding="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:background="@drawable/selector_edit_text_background"
+                android:inputType="phone"
+                android:textColor="@color/main_text_color"
+                app:layout_constraintEnd_toEndOf="@+id/nameET"
+                app:layout_constraintStart_toStartOf="@+id/nameET"
+                app:layout_constraintTop_toBottomOf="@+id/nameET" />
+
+            <EditText
+                android:id="@+id/emailET"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:hint="@string/email_address"
+                android:drawableStart="@drawable/email_icon"
+                android:drawablePadding="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:background="@drawable/selector_edit_text_background"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/main_text_color"
+                app:layout_constraintEnd_toEndOf="@+id/phoneET"
+                app:layout_constraintStart_toStartOf="@+id/phoneET"
+                app:layout_constraintTop_toBottomOf="@+id/phoneET" />
+
+            <EditText
+                android:id="@+id/passwordET"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="24dp"
+                android:ems="10"
+                android:hint="@string/password"
+                android:drawableStart="@drawable/selector_lock_ic"
+                android:drawablePadding="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:background="@drawable/selector_edit_text_background"
+                android:inputType="textPassword"
+                android:textColor="@color/main_text_color"
+                app:layout_constraintEnd_toEndOf="@+id/emailET"
+                app:layout_constraintStart_toStartOf="@+id/emailET"
+                app:layout_constraintTop_toBottomOf="@+id/emailET" />
+
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="@string/create_account"
+                android:background="@color/black"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="@+id/passwordET"
+                app:layout_constraintStart_toStartOf="@+id/passwordET"
+                app:layout_constraintTop_toBottomOf="@+id/passwordET" />
+
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/already_have_an_account"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/loginTV"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+
+            <TextView
+                android:id="@+id/loginTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="24dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="@string/sign_in"
+                android:textColor="@color/main_text_color"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout>
