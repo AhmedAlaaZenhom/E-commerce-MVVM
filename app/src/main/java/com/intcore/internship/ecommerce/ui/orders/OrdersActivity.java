@@ -1,9 +1,11 @@
 package com.intcore.internship.ecommerce.ui.orders;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.intcore.internship.ecommerce.BR;
 import com.intcore.internship.ecommerce.R;
 import com.intcore.internship.ecommerce.data.models.OrderModel;
+import com.intcore.internship.ecommerce.data.sharedPreferences.PreferenceHelper;
 import com.intcore.internship.ecommerce.databinding.ActivityOrdersBinding;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseActivity;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
@@ -31,7 +34,10 @@ public class OrdersActivity extends BaseActivity<ActivityOrdersBinding> {
     private OrdersViewModel ordersViewModel ;
     private ActivityOrdersBinding activityOrdersBinding ;
 
+    private OrdersRecyclerAdapter ordersRecyclerAdapter;
     private ArrayList<OrderModel> orderModelArrayList;
+
+    private boolean isCurrentLocaleAR;
 
     @Override
     public int getBindingVariable() {
@@ -50,12 +56,20 @@ public class OrdersActivity extends BaseActivity<ActivityOrdersBinding> {
         return ordersViewModel;
     }
 
+    @Nullable
+    @Override
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityOrdersBinding = getViewDataBinding() ;
+        isCurrentLocaleAR = ordersViewModel.getSavedLocale().equals(PreferenceHelper.LOCALE_ARABIC);
         initToolbar();
         setUpViews();
+        ordersViewModel.getOrders();
     }
 
     private void initToolbar() {
@@ -66,10 +80,11 @@ public class OrdersActivity extends BaseActivity<ActivityOrdersBinding> {
     }
 
     private void setUpViews() {
-        // TODO: initiate RV with adapter
-        orderModelArrayList = new ArrayList<>() ;
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) ;
         activityOrdersBinding.ordersRV.setLayoutManager(linearLayoutManager);
+        orderModelArrayList = new ArrayList<>() ;
+        ordersRecyclerAdapter = new OrdersRecyclerAdapter(this,isCurrentLocaleAR,orderModelArrayList);
+        activityOrdersBinding.ordersRV.setAdapter(ordersRecyclerAdapter);
     }
 
     @Override
@@ -78,7 +93,7 @@ public class OrdersActivity extends BaseActivity<ActivityOrdersBinding> {
         final Observer<List<OrderModel>> orderListObserver = orderModels -> {
             orderModelArrayList.clear();
             orderModelArrayList.addAll(orderModels) ;
-            // TODO: adapter.notifyDataSetChanged();
+            ordersRecyclerAdapter.notifyDataSetChanged();
         };
         ordersViewModel.getOrderModelListLD().observe(this,orderListObserver);
     }

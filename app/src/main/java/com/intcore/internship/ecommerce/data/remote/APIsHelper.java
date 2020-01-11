@@ -11,11 +11,14 @@ import com.intcore.internship.ecommerce.data.remote.helperModels.deals.DealsPage
 import com.intcore.internship.ecommerce.data.remote.helperModels.favourite.ToggleFavStateRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.favourite.ToggleFavStateResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.favourite.WishListResponseModel;
+import com.intcore.internship.ecommerce.data.remote.helperModels.filter.FilterDataResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.home.HomeResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.login.LoginResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.login.LoginRequestModel;
+import com.intcore.internship.ecommerce.data.remote.helperModels.login.SocialLoginRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.order.OrderRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.order.OrderResponseModel;
+import com.intcore.internship.ecommerce.data.remote.helperModels.products.ProductsResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.profile.ProfileResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.register.RegisterRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.register.RegisterResponseModel;
@@ -69,6 +72,11 @@ public class APIsHelper {
         return getEcommerceAPI().loginUsingEmailAndPassword(loginRequestModel);
     }
 
+    public Single<Response<LoginResponseModel>> loginUsingSocialMedia(String socialID, String socialType) {
+        final SocialLoginRequestModel socialLoginRequestModel = new SocialLoginRequestModel(socialID, socialType);
+        return getEcommerceAPI().loginUsingSocialMedia(socialLoginRequestModel);
+    }
+
     public Single<Response<RegisterResponseModel>> register(String name, String email, String phone, String password) {
         final RegisterRequestModel registerRequestModel = new RegisterRequestModel(name, email, phone, password);
         return getEcommerceAPI().register(registerRequestModel);
@@ -112,10 +120,29 @@ public class APIsHelper {
         return getEcommerceAPI().getDealsPage(apiToken);
     }
 
-    // Product
+    // Products
 
     public Single<Response<ProductModel>> getProduct(int productID, String apiToken) {
         return getEcommerceAPI().getProduct(productID, apiToken);
+    }
+
+    public Single<Response<ProductsResponseModel>> getProducts(
+            String apiToken,
+            String keyword,
+            Integer categoryID,
+            Integer subCategoryID,
+            Integer brandID,
+            Integer maxPrice,
+            Integer minPrice,
+            Integer sortBy
+    ) {
+        return getEcommerceAPI().getProducts(apiToken, keyword, categoryID, subCategoryID, brandID, maxPrice, minPrice, sortBy);
+    }
+
+    // filter
+
+    public Single<Response<FilterDataResponseModel>> getFilterData(Integer categoryID){
+        return getEcommerceAPI().getFilterData(categoryID);
     }
 
     // Categories

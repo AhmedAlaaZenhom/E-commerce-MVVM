@@ -13,9 +13,11 @@ import com.intcore.internship.ecommerce.databinding.ActivityAddAddressBinding;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseActivity;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class AddAddressActivity extends BaseActivity<ActivityAddAddressBinding> {
 
@@ -42,6 +44,12 @@ public class AddAddressActivity extends BaseActivity<ActivityAddAddressBinding> 
         addAddressViewModel = ViewModelProviders.of(this,
                 getCompositionRoot().getViewModelProviderFactory()).get(AddAddressViewModel.class) ;
         return addAddressViewModel;
+    }
+
+    @Nullable
+    @Override
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return null;
     }
 
     @Override

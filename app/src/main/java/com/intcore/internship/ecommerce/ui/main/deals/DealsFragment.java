@@ -11,19 +11,23 @@ import com.intcore.internship.ecommerce.data.remote.helperModels.deals.DealsPage
 import com.intcore.internship.ecommerce.data.models.BrandModel;
 import com.intcore.internship.ecommerce.data.models.CategoryModel;
 import com.intcore.internship.ecommerce.data.models.ProductModel;
+import com.intcore.internship.ecommerce.data.sharedPreferences.PreferenceHelper;
 import com.intcore.internship.ecommerce.databinding.FragmentMainDealsBinding;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseFragment;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
-import com.intcore.internship.ecommerce.ui.main.commons.BrandRecyclerAdapter;
-import com.intcore.internship.ecommerce.ui.main.commons.CategoryRecyclerAdapter;
-import com.intcore.internship.ecommerce.ui.main.commons.ProductRecyclerAdapter;
+import com.intcore.internship.ecommerce.ui.category_brand.CategoriesActivity;
+import com.intcore.internship.ecommerce.ui.category_brand.CategoryBrandActivity;
+import com.intcore.internship.ecommerce.ui.commonClasses.CategoryRecyclerAdapter;
+import com.intcore.internship.ecommerce.ui.commonClasses.ProductRecyclerAdapter;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class DealsFragment extends BaseFragment<FragmentMainDealsBinding>
         implements ProductRecyclerAdapter.ClickListener , CategoryRecyclerAdapter.ClickListener , BrandRecyclerAdapter.ClickListener {
@@ -36,6 +40,8 @@ public class DealsFragment extends BaseFragment<FragmentMainDealsBinding>
     private ArrayList<CategoryModel> categoryModelArrayList;
     private BrandRecyclerAdapter brandsAdapter ;
     private ArrayList<BrandModel> brandModelArrayList ;
+
+    private boolean isCurrentLocaleAR;
 
 
 
@@ -59,9 +65,15 @@ public class DealsFragment extends BaseFragment<FragmentMainDealsBinding>
 
     @Override
     public BaseViewModel getViewModel() {
-        dealsViewModel = ViewModelProviders.of(requireActivity(),
+        dealsViewModel = ViewModelProviders.of(this,
                 getCompositionRoot().getViewModelProviderFactory()).get(DealsViewModel.class) ;
         return dealsViewModel;
+    }
+
+    @Nullable
+    @Override
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return fragmentMainDealsBinding.swipeRefreshLayout;
     }
 
     private DealsViewModel dealsViewModel ;
@@ -71,6 +83,8 @@ public class DealsFragment extends BaseFragment<FragmentMainDealsBinding>
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  super.onCreateView(inflater, container, savedInstanceState);
         fragmentMainDealsBinding = getViewDataBinding() ;
+        isCurrentLocaleAR = dealsViewModel.getSavedLocale().equals(PreferenceHelper.LOCALE_ARABIC);
+
         setUpViews();
         dealsViewModel.getDealsPage();
         return view ;
@@ -81,21 +95,23 @@ public class DealsFragment extends BaseFragment<FragmentMainDealsBinding>
 
         // hot deals section
         hotDealsModelArrayList = new ArrayList<>() ;
-        hotDealsAdapter = new ProductRecyclerAdapter(hotDealsModelArrayList,this);
+        hotDealsAdapter = new ProductRecyclerAdapter(isCurrentLocaleAR, requireActivity(),ProductRecyclerAdapter.MODE_HORIZONTAL,hotDealsModelArrayList,this);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
         fragmentMainDealsBinding.todayHotDealsRV.setAdapter(hotDealsAdapter);
         fragmentMainDealsBinding.todayHotDealsRV.setLayoutManager(layoutManager1);
 
         // Top categories section
         categoryModelArrayList = new ArrayList<>() ;
-        topCategoriesAdapter = new CategoryRecyclerAdapter(categoryModelArrayList,this);
+        topCategoriesAdapter = new CategoryRecyclerAdapter(isCurrentLocaleAR, requireActivity(),CategoryRecyclerAdapter.MODE_HORIZONTAL,categoryModelArrayList,this);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
         fragmentMainDealsBinding.topCategoriesRV.setAdapter(topCategoriesAdapter);
         fragmentMainDealsBinding.topCategoriesRV.setLayoutManager(layoutManager2);
+        fragmentMainDealsBinding.topCategoriesSeeMoreTV.setOnClickListener(v -> CategoriesActivity.startActivity(requireContext()));
+
 
         // Top brands section
         brandModelArrayList = new ArrayList<>() ;
-        brandsAdapter = new BrandRecyclerAdapter(brandModelArrayList,this);
+        brandsAdapter = new BrandRecyclerAdapter(requireActivity(),brandModelArrayList,this);
         LinearLayoutManager layoutManager3 = new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false);
         fragmentMainDealsBinding.topBrandsRV.setAdapter(brandsAdapter);
         fragmentMainDealsBinding.topBrandsRV.setLayoutManager(layoutManager3);
@@ -106,8 +122,6 @@ public class DealsFragment extends BaseFragment<FragmentMainDealsBinding>
     protected void setUpObservers() {
         super.setUpObservers();
         final Observer<DealsPageResponseModel> dealsPageResponseModelObserver = dealsPageResponseModel -> {
-            if(fragmentMainDealsBinding.swipeRefreshLayout.isRefreshing())
-                fragmentMainDealsBinding.swipeRefreshLayout.setRefreshing(false);
             handleAdaptersDataRefreshing(dealsPageResponseModel);
             handleSectionsVisibility();
         };
@@ -136,6 +150,7 @@ public class DealsFragment extends BaseFragment<FragmentMainDealsBinding>
         // hot deals section
         int hotDealsVisibility = hotDealsModelArrayList.isEmpty()?View.GONE:View.VISIBLE ;
         fragmentMainDealsBinding.todayHotDealsTV.setVisibility(hotDealsVisibility);
+        fragmentMainDealsBinding.todayHotDealsSeeMoreTV.setVisibility(View.GONE);
         fragmentMainDealsBinding.todayHotDealsRV.setVisibility(hotDealsVisibility);
 
         // Top categories section
@@ -147,18 +162,18 @@ public class DealsFragment extends BaseFragment<FragmentMainDealsBinding>
         // Top brands section
         int topBrandsVisibility = brandModelArrayList.isEmpty()?View.GONE:View.VISIBLE ;
         fragmentMainDealsBinding.topBrandsTV.setVisibility(topBrandsVisibility);
-        fragmentMainDealsBinding.topBrandsSeeMoreTV.setVisibility(topBrandsVisibility);
+        fragmentMainDealsBinding.topBrandsSeeMoreTV.setVisibility(View.GONE);
         fragmentMainDealsBinding.topBrandsRV.setVisibility(topBrandsVisibility);
     }
 
     @Override
     public void onBrandClicked(BrandModel brandModel) {
-
+        CategoryBrandActivity.startActivity(requireContext(),brandModel);
     }
 
     @Override
     public void onCategoryClicked(CategoryModel categoryModel) {
-
+        CategoryBrandActivity.startActivity(requireContext(),categoryModel);
     }
 
     @Override

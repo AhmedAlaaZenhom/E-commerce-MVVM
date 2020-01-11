@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/sortByNew"
+        android:tag="1"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:text="@string/new_text"
+        android:textSize="16sp"
+        android:textColor="@color/main_text_color"
+        android:fontFamily="@font/sfui_medium"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"/>
+
+    <TextView
+        android:id="@+id/sortByPopular"
+        android:tag="2"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:text="@string/popular"
+        android:textSize="16sp"
+        android:textColor="@color/main_text_color"
+        android:fontFamily="@font/sfui_medium"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"/>
+
+    <TextView
+        android:id="@+id/sortByHighToLow"
+        android:tag="3"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:text="@string/price_high_to_low"
+        android:textSize="16sp"
+        android:textColor="@color/main_text_color"
+        android:fontFamily="@font/sfui_medium"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"/>
+
+    <TextView
+        android:id="@+id/sortByLowToHigh"
+        android:tag="4"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:text="@string/price_low_to_high"
+        android:textSize="16sp"
+        android:textColor="@color/main_text_color"
+        android:fontFamily="@font/sfui_medium"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator"/>
+
+    <TextView
+        android:id="@+id/dialogButtonCancel"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:text="@string/cancel"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/sfui_medium"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/background_gradient"/>
+
+</LinearLayout>

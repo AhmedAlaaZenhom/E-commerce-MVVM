@@ -9,6 +9,7 @@ import com.intcore.internship.ecommerce.data.remote.helperModels.cart.CartsRespo
 import com.intcore.internship.ecommerce.data.remote.helperModels.order.OrderResponseModel;
 import com.intcore.internship.ecommerce.data.models.AddressModel;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 
 import java.util.List;
 
@@ -61,21 +62,23 @@ public class CheckoutViewModel extends BaseViewModel {
                         getAddressesLD().setValue(response.body());
                     } else {
                         Log.d(TAG, "GetAddresses failure: " + response.errorBody().string());
-                        setToastMessagesLD(getApplication().getString(R.string.unknown_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.unknown_error),ToastsHelper.MESSAGE_TYPE_WARNING));
                     }
                 }, throwable -> {
                     Log.d(TAG, "GetAddresses throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 }));
     }
 
     void getCarts() {
         Log.d(TAG, "Starting GetCarts call ...");
+        setProgressLoadingLD(true);
         getCompositeDisposable().add(dataManager
                 .getCarts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    setProgressLoadingLD(false);
                     if (response.isSuccessful()) {
                         Log.d(TAG, "GetCarts Success");
                         getCartResponseLD().setValue(response.body());
@@ -84,18 +87,21 @@ public class CheckoutViewModel extends BaseViewModel {
                     }
                 }, throwable -> {
                     Log.d(TAG, "GetCarts throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setProgressLoadingLD(false);
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 })
         );
     }
 
     void createOrder(Integer addressID){
         Log.d(TAG, "Starting CreateOrder call ...");
+        setProgressLoadingLD(true);
         getCompositeDisposable().add(dataManager
                 .createOrder(addressID)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    setProgressLoadingLD(false);
                     if (response.isSuccessful()) {
                         Log.d(TAG, "CreateOrder Success");
                         getOrderResponseModelLD().setValue(response.body());
@@ -104,8 +110,13 @@ public class CheckoutViewModel extends BaseViewModel {
                     }
                 }, throwable -> {
                     Log.d(TAG, "CreateOrder throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setProgressLoadingLD(false);
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 })
         );
+    }
+
+    public String getSavedLocale() {
+        return dataManager.getSavedLocale();
     }
 }

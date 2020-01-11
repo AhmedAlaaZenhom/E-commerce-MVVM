@@ -15,33 +15,27 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
-        <activity android:name=".ui.orders.OrdersActivity"></activity>
+        <activity android:name=".ui.category_brand.CategoriesActivity" />
+        <activity android:name=".ui.category_brand.CategoryBrandActivity" />
+        <activity android:name=".ui.orders.OrdersActivity" />
+        <activity android:name=".ui.addresses.AddAddressActivity" />
+        <activity android:name=".ui.addresses.AddressesActivity" />
+        <activity android:name=".ui.checkout.CheckoutActivity" />
+        <activity android:name=".ui.product.ProductScreenActivity" />
+        <activity android:name=".ui.main.mainScreen.MainActivity" />
         <activity
-            android:name=".ui.addresses.AddAddressActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
-            android:name=".ui.addresses.AddressesActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
-            android:name=".ui.checkout.CheckoutActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
-            android:name=".ui.product.ProductScreenActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity android:name=".ui.register.RegisterActivity"
-            android:theme="@style/AppThemeNoActionBar"/>
-        <activity
-            android:name=".ui.main.mainScreen.MainActivity"
-            android:theme="@style/AppThemeNoActionBar" />
+            android:name=".ui.register.RegisterActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.login.LoginActivity"
-            android:theme="@style/AppThemeNoActionBar" />
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.splash.SplashActivity"
-            android:theme="@style/AppThemeNoActionBar">
+            android:theme="@style/AppThemeFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

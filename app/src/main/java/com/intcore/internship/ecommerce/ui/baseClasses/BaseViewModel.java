@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.intcore.internship.ecommerce.ApplicationClass;
 import com.intcore.internship.ecommerce.di.ViewModelCompositionRoot;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,7 +17,8 @@ public class BaseViewModel extends AndroidViewModel {
     private CompositeDisposable mCompositeDisposable;
 
     private MutableLiveData<Boolean> progressLoadingLD ;
-    private MutableLiveData<String> toastMessagesLD ;
+    private MutableLiveData<Boolean> swipeRefreshLoadingLD ;
+    private MutableLiveData<ToastsHelper.ToastMessage> toastMessagesLD ;
 
     public BaseViewModel(@NonNull Application application) {
         super(application);
@@ -51,13 +53,23 @@ public class BaseViewModel extends AndroidViewModel {
         getProgressLoadingLD().setValue(loading);
     }
 
-    MutableLiveData<String> getToastMessagesLD() {
+    MutableLiveData<Boolean> getSwipeRefreshLoadingLD() {
+        if(swipeRefreshLoadingLD==null)
+            swipeRefreshLoadingLD = new MutableLiveData<>() ;
+        return swipeRefreshLoadingLD;
+    }
+
+    protected void setToastMessagesLD(ToastsHelper.ToastMessage message) {
+        getToastMessagesLD().setValue(message);
+    }
+
+    MutableLiveData<ToastsHelper.ToastMessage> getToastMessagesLD() {
         if(toastMessagesLD==null)
             toastMessagesLD = new MutableLiveData<>() ;
         return toastMessagesLD;
     }
 
-    protected void setToastMessagesLD(String message) {
-        getToastMessagesLD().setValue(message);
+    protected void setSwipeRefreshLoadingLD(Boolean isLoading) {
+        getSwipeRefreshLoadingLD().setValue(isLoading);
     }
 }

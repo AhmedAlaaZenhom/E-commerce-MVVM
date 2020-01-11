@@ -20,4 +20,5 @@ public class LoginResponseModel {
     public List<LoginErrorModel> getErrorModelList() {
         return errorModelList;
     }
+
 }

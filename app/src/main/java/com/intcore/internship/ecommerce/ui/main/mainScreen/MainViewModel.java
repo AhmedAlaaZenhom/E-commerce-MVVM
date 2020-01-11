@@ -9,6 +9,7 @@ import com.intcore.internship.ecommerce.data.remote.helperModels.cart.CartsRespo
 import com.intcore.internship.ecommerce.data.remote.helperModels.profile.ProfileResponseModel;
 import com.intcore.internship.ecommerce.data.models.CategoryModel;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainViewModel extends BaseViewModel {
 
-    public static final String TAG = MainViewModel.class.getSimpleName() ;
+    private static final String TAG = MainViewModel.class.getSimpleName() ;
 
     private MutableLiveData<CartsResponseModel> cartItemsLD ;
     MutableLiveData<CartsResponseModel> getCartItemsLD() {
@@ -65,7 +66,7 @@ public class MainViewModel extends BaseViewModel {
                         }
                     }, throwable -> {
                         Log.d(TAG, "GetCarts throwable: "+throwable.getMessage());
-                        setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                     })
             );
         }
@@ -86,7 +87,7 @@ public class MainViewModel extends BaseViewModel {
                     }
                 }, throwable -> {
                     Log.d(TAG, "GetCategories throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 })
         );
     }
@@ -107,10 +108,13 @@ public class MainViewModel extends BaseViewModel {
                         }
                     }, throwable -> {
                         Log.d(TAG, "GetProfile throwable: "+throwable.getMessage());
-                        setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                     })
             );
         }
     }
 
+    public String getSavedLocale() {
+        return dataManager.getSavedLocale();
+    }
 }

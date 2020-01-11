@@ -1,9 +1,12 @@
 package com.intcore.internship.ecommerce.ui.splash;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import com.intcore.internship.ecommerce.BR;
@@ -16,6 +19,7 @@ import com.intcore.internship.ecommerce.ui.main.mainScreen.MainActivity;
 public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
 
     private SplashViewModel mSplashViewModel;
+    private boolean isFinished = false;
 
     @Override
     public int getBindingVariable() {
@@ -34,22 +38,32 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
         return mSplashViewModel;
     }
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mSplashViewModel.decideNextActivity();
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return null;
     }
 
     @Override
-    protected void setUpObservers() {
-        super.setUpObservers();
-        final Observer<Boolean> loggedInMoodObserver = isLoggedIn -> {
-            if (isLoggedIn)
-                openMainActivity();
-            else
-                openLoginActivity();
-        };
-        mSplashViewModel.getIsLoggedInMood().observe(this, loggedInMoodObserver);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        new Handler().postDelayed(() -> {
+            if (!isFinished)
+                decideNextActivity();
+        }, 1000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        isFinished = true;
+        super.onDestroy();
+    }
+
+    private void decideNextActivity() {
+        if (mSplashViewModel.isUserLoggedIn())
+            openMainActivity();
+        else
+            openLoginActivity();
     }
 
     private void openLoginActivity() {
@@ -61,4 +75,5 @@ public class SplashActivity extends BaseActivity<ActivitySplashBinding> {
         MainActivity.startActivity(this);
         finish();
     }
+
 }

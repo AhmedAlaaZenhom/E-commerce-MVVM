@@ -1,5 +1,6 @@
 package com.intcore.internship.ecommerce.ui.main.wishlist;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,25 +11,32 @@ import android.widget.TextView;
 import com.intcore.internship.ecommerce.R;
 import com.intcore.internship.ecommerce.data.models.ProductModel;
 import com.intcore.internship.ecommerce.ui.commonClasses.PicassoHelper;
+import com.intcore.internship.ecommerce.ui.commonClasses.Utils;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class WishListRecyclerAdapter extends RecyclerView.Adapter<WishListRecyclerAdapter.MyViewHolder> {
 
     public interface ClickListener {
-        void onBuyItemNowClicked(ProductModel productModel);
+        void onItemClicked(ProductModel productModel);
+
         void onRemoveItemClicked(ProductModel productModel);
     }
 
     private ArrayList<ProductModel> list;
     private ClickListener clickListener;
+    private int parentHeight;
+    private boolean isCurrentLocaleAR;
 
-    public WishListRecyclerAdapter(ArrayList<ProductModel> list, ClickListener clickListener) {
+    WishListRecyclerAdapter(boolean isCurrentLocaleAR, Activity activity, ArrayList<ProductModel> list, ClickListener clickListener) {
+        this.isCurrentLocaleAR = isCurrentLocaleAR;
         this.list = list;
         this.clickListener = clickListener;
+        parentHeight = (int) (Utils.getDisplayMetrics(activity).widthPixels * 0.32);
     }
 
     @NonNull
@@ -53,34 +61,41 @@ public class WishListRecyclerAdapter extends RecyclerView.Adapter<WishListRecycl
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView productIV ;
-        private TextView productNameTV ;
-        private TextView productPriceTV ;
-        private TextView productPriceBeforeOfferTV ;
-        private ImageView removeFromCartIV ;
-        private Button buyNowBtn ;
+        private CardView parentCV;
+        private ImageView productIV;
+        private TextView productNameTV;
+        private TextView productPriceTV;
+        private ImageView removeFromCartIV;
 
         private MyViewHolder(View v) {
             super(v);
+            parentCV = v.findViewById(R.id.parentCV);
             productIV = v.findViewById(R.id.productIV);
             productNameTV = v.findViewById(R.id.productNameTV);
             productPriceTV = v.findViewById(R.id.productPriceTV);
-            productPriceBeforeOfferTV = v.findViewById(R.id.productPriceBeforeOfferTV);
             removeFromCartIV = v.findViewById(R.id.removeFromCartIV);
-            buyNowBtn = v.findViewById(R.id.buyNowBtn);
+
+            parentCV.getLayoutParams().height = parentHeight;
         }
 
         private void bindData(ProductModel data) {
             PicassoHelper.loadImageWithCache(
-                    PicassoHelper.STORAGE_BASE_URL+data.getDefaultImage(),productIV);
-            productNameTV.setText(data.getNameEN());
+                    PicassoHelper.STORAGE_BASE_URL + data.getDefaultImage(),
+                    productIV,
+                    PicassoHelper.JUST_FIT,
+                    null,
+                    null);
+
+            productNameTV.setText(isCurrentLocaleAR ? data.getNameAR() : data.getNameEN());
             productPriceTV.setText("$" + String.format("%.1f", data.getPrice()));
-            buyNowBtn.setOnClickListener(v -> {
-                if(clickListener!=null)
-                    clickListener.onBuyItemNowClicked(data);
+
+            parentCV.setOnClickListener(v -> {
+                if (clickListener != null)
+                    clickListener.onItemClicked(data);
             });
+
             removeFromCartIV.setOnClickListener(v -> {
-                if(clickListener!=null)
+                if (clickListener != null)
                     clickListener.onRemoveItemClicked(data);
             });
         }

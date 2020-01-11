@@ -3,7 +3,9 @@ package com.intcore.internship.ecommerce.data.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class AddressModel {
+import java.io.Serializable;
+
+public class AddressModel implements Serializable {
 
     @SerializedName("id")
     private Integer id;

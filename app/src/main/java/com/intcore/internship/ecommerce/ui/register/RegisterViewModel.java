@@ -10,6 +10,7 @@ import com.intcore.internship.ecommerce.data.models.UserModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.register.RegisterErrorModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.register.RegisterResponseModel;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -34,7 +35,7 @@ public class RegisterViewModel extends BaseViewModel {
         dataManager = getCompositionRoot().getDataManager() ;
     }
 
-    void register(String name, String email, String phone ,  String password) {
+    void register(String name, String email, String phone, String password) {
         Log.d(TAG, "Register call started");
         setProgressLoadingLD(true);
         getCompositeDisposable().add(dataManager
@@ -56,14 +57,14 @@ public class RegisterViewModel extends BaseViewModel {
                                 .fromJson(response.errorBody().string(), RegisterResponseModel.class)
                                 .getErrorModelList()
                                 .get(0);
-                        setToastMessagesLD(errorModel.getMessage());
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(errorModel.getMessage(),ToastsHelper.MESSAGE_TYPE_ERROR));
                     } else {
-                        setToastMessagesLD(getApplication().getString(R.string.unknown_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.unknown_error),ToastsHelper.MESSAGE_TYPE_WARNING));
                     }
                 }, throwable -> {
                     Log.d(TAG, "Register error: " + throwable.getMessage());
                     setProgressLoadingLD(false);
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 }));
     }
 

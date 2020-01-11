@@ -7,6 +7,7 @@ import com.intcore.internship.ecommerce.R;
 import com.intcore.internship.ecommerce.data.DataManager;
 import com.intcore.internship.ecommerce.data.models.AddressModel;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 
 import java.util.List;
 
@@ -40,16 +41,17 @@ public class AddressesViewModel extends BaseViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    setSwipeRefreshLoadingLD(false);
                     if (response.isSuccessful()) {
                         Log.d(TAG, "GetAddresses call success ...");
                         getAddressesLD().setValue(response.body());
                     } else {
                         Log.d(TAG, "GetAddresses failure: " + response.errorBody().string());
-                        setToastMessagesLD(getApplication().getString(R.string.unknown_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.unknown_error),ToastsHelper.MESSAGE_TYPE_WARNING));
                     }
                 }, throwable -> {
                     Log.d(TAG, "GetAddresses throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 }));
     }
 }

@@ -3,12 +3,14 @@ package com.intcore.internship.ecommerce.data.models;
 import com.google.gson.annotations.SerializedName;
 import com.intcore.internship.ecommerce.data.local.TablesNames;
 
+import java.io.Serializable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = TablesNames.BRANDS)
-public class BrandModel {
+public class BrandModel implements Serializable {
 
     @PrimaryKey
     @ColumnInfo(name = "id")

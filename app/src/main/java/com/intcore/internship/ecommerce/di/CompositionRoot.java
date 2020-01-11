@@ -13,7 +13,7 @@ public class CompositionRoot {
     }
 
     private DataManager dataManager ;
-    DataManager getDataManager() {
+    public DataManager getDataManager() {
         if (dataManager == null)
             dataManager = new DataManager(application);
         return dataManager;

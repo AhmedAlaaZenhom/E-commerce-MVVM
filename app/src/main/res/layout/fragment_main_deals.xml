@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -21,20 +20,32 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:clipToPadding="false"
+                android:clipChildren="false">
 
-                <ImageView
-                    android:id="@+id/adsIV"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/adsCV"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:adjustViewBounds="true"
+                    app:layout_constraintDimensionRatio="1:.45"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ads" />
+                    android:elevation="5dp"
+                    app:cardCornerRadius="10dp">
+
+                    <ImageView
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        app:srcCompat="@drawable/ads"
+                        android:scaleType="centerCrop"/>
+
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/todayHotDealsTV"
@@ -43,16 +54,35 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:text="@string/hot_deals_today"
+                    android:textSize="15sp"
                     android:textColor="@color/main_text_color"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/sfui_semibold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/adsIV" />
+                    app:layout_constraintTop_toBottomOf="@id/adsCV" />
+
+                <TextView
+                    android:id="@+id/todayHotDealsSeeMoreTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:drawableEnd="@drawable/ic_arrow"
+                    android:text="@string/see_more"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:fontFamily="@font/sfui_medium"
+                    app:layout_constraintBottom_toBottomOf="@+id/todayHotDealsTV"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/todayHotDealsTV"
+                    android:padding="3dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/todayHotDealsRV"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="w,1:2"
                     android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -66,9 +96,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:text="@string/top_categories"
+                    android:textSize="15sp"
                     android:textColor="@color/main_text_color"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/sfui_semibold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/todayHotDealsRV" />
 
@@ -76,10 +106,12 @@
                     android:id="@+id/topCategoriesSeeMoreTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="8dp"
                     android:drawableEnd="@drawable/ic_arrow"
                     android:text="@string/see_more"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:fontFamily="@font/sfui_medium"
                     app:layout_constraintBottom_toBottomOf="@+id/topCategoriesTV"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/topCategoriesTV"
@@ -91,8 +123,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/topCategoriesRV"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginTop="8dp"
+                    app:layout_constraintDimensionRatio="1:.36"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/topCategoriesTV" />
@@ -105,9 +138,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="16dp"
                     android:text="@string/top_brands"
+                    android:textSize="15sp"
                     android:textColor="@color/main_text_color"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/sfui_semibold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/topCategoriesRV" />
 
@@ -115,10 +148,12 @@
                     android:id="@+id/topBrandsSeeMoreTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="8dp"
                     android:drawableEnd="@drawable/ic_arrow"
                     android:text="@string/see_more"
-                    android:textSize="15sp"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:fontFamily="@font/sfui_medium"
                     app:layout_constraintBottom_toBottomOf="@+id/topBrandsTV"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/topBrandsTV"
@@ -130,11 +165,12 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/topBrandsRV"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="w,1:2"
                     android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/topBrandsSeeMoreTV" />
+                    app:layout_constraintTop_toBottomOf="@+id/topBrandsTV" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

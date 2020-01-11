@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,9 +24,12 @@ import com.intcore.internship.ecommerce.data.remote.helperModels.cart.CartsRespo
 import com.intcore.internship.ecommerce.data.remote.helperModels.profile.ProfileResponseModel;
 import com.intcore.internship.ecommerce.data.models.CategoryModel;
 import com.intcore.internship.ecommerce.data.models.UserModel;
+import com.intcore.internship.ecommerce.data.sharedPreferences.PreferenceHelper;
 import com.intcore.internship.ecommerce.databinding.ActivityMainBinding;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseActivity;
+import com.intcore.internship.ecommerce.ui.category_brand.CategoryBrandActivity;
 import com.intcore.internship.ecommerce.ui.commonClasses.ActivitiesRequestCodes;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 import com.intcore.internship.ecommerce.ui.main.cart.CartFragment;
 import com.intcore.internship.ecommerce.ui.main.deals.DealsFragment;
 import com.intcore.internship.ecommerce.ui.main.home.HomeFragment;
@@ -39,7 +43,8 @@ public class MainActivity extends BaseActivity<ActivityMainBinding>
         implements SideBarCategoriesAdapter.ClickListener {
 
     public static void startActivity(Context context) {
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context.getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -52,6 +57,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding>
 
     private SideBarCategoriesAdapter sideBarCategoriesAdapter;
     private ArrayList<CategoryModel> sideBarCategoriesList;
+
+    private boolean isCurrentLocaleAR;
+
+    private long lastTimeBackPressed;
 
     @Override
     public int getBindingVariable() {
@@ -70,11 +79,20 @@ public class MainActivity extends BaseActivity<ActivityMainBinding>
         return mainViewModel;
     }
 
+    @Nullable
+    @Override
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         activityMainBinding = getViewDataBinding();
+
+        isCurrentLocaleAR = mainViewModel.getSavedLocale().equals(PreferenceHelper.LOCALE_ARABIC);
+
         setUpSideBar();
         setUpToolBar();
 
@@ -91,9 +109,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding>
         mainViewModel.getCarts();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (activityMainBinding.drawer.isDrawerOpen(GravityCompat.START)) {
+            activityMainBinding.drawer.closeDrawers();
+            return;
+        }
+        final long timeNow = System.currentTimeMillis();
+        if (timeNow - lastTimeBackPressed > 2000) {
+            lastTimeBackPressed = timeNow;
+            toastsHelper.showMessage(new ToastsHelper.ToastMessage(getString(R.string.press_again_to_exit), ToastsHelper.MESSAGE_TYPE_INFO));
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void setUpSideBar() {
         sideBarCategoriesList = new ArrayList<>();
-        sideBarCategoriesAdapter = new SideBarCategoriesAdapter(sideBarCategoriesList, this);
+        sideBarCategoriesAdapter = new SideBarCategoriesAdapter(isCurrentLocaleAR, sideBarCategoriesList, this);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         ((RecyclerView) activityMainBinding.sideBarLayout.findViewById(R.id.categoriesRV)).setLayoutManager(linearLayoutManager);
         ((RecyclerView) activityMainBinding.sideBarLayout.findViewById(R.id.categoriesRV)).setAdapter(sideBarCategoriesAdapter);
@@ -113,10 +146,6 @@ public class MainActivity extends BaseActivity<ActivityMainBinding>
         activityMainBinding.toolbar.findViewById(R.id.toolbarCartIV).setVisibility(View.VISIBLE);
         activityMainBinding.toolbar.findViewById(R.id.toolbarCartIV).setOnClickListener(
                 v -> activityMainBinding.bottomNavigationView.setSelectedItemId(R.id.bottomNavCart));
-
-        activityMainBinding.toolbar.findViewById(R.id.toolbarSearchIV).setVisibility(View.VISIBLE);
-        activityMainBinding.toolbar.findViewById(R.id.toolbarSearchIV).setOnClickListener(v -> {
-        });
     }
 
     @Override
@@ -175,25 +204,20 @@ public class MainActivity extends BaseActivity<ActivityMainBinding>
         if (fragment == null) {
             if (fragmentTag.equals(HomeFragment.TAG)) {
                 fragment = HomeFragment.newInstance();
-                titleStringRes = R.string.home ;
-            }
-            else if (fragmentTag.equals(DealsFragment.TAG)) {
+                titleStringRes = R.string.home;
+            } else if (fragmentTag.equals(DealsFragment.TAG)) {
                 fragment = DealsFragment.newInstance();
-                titleStringRes = R.string.deals ;
-            }
-            else if (fragmentTag.equals(WishListFragment.TAG)) {
+                titleStringRes = R.string.deals;
+            } else if (fragmentTag.equals(WishListFragment.TAG)) {
                 fragment = WishListFragment.newInstance();
-                titleStringRes = R.string.wishlist ;
-            }
-            else if (fragmentTag.equals(CartFragment.TAG)) {
+                titleStringRes = R.string.wishlist;
+            } else if (fragmentTag.equals(CartFragment.TAG)) {
                 fragment = CartFragment.newInstance();
-                titleStringRes = R.string.cart ;
-            }
-            else if (fragmentTag.equals(ProfileFragment.TAG)) {
+                titleStringRes = R.string.cart;
+            } else if (fragmentTag.equals(ProfileFragment.TAG)) {
                 fragment = ProfileFragment.newInstance();
-                titleStringRes = R.string.profile ;
-            }
-            else
+                titleStringRes = R.string.profile;
+            } else
                 return;
         }
         replaceFragment(fragment, fragmentTag, titleStringRes);
@@ -213,28 +237,22 @@ public class MainActivity extends BaseActivity<ActivityMainBinding>
     @Override
     public void onCategoryClicked(CategoryModel categoryModel) {
         activityMainBinding.drawer.closeDrawers();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (activityMainBinding.drawer.isDrawerOpen(GravityCompat.START))
-            activityMainBinding.drawer.closeDrawers();
-        else
-            super.onBackPressed();
+        CategoryBrandActivity.startActivity(this, categoryModel);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
+        switch (requestCode) {
             case ActivitiesRequestCodes.PRODUCT_SCREEN_REQUEST_CODE:
-                if(resultCode==RESULT_OK)
+                if (resultCode == RESULT_OK)
                     setSelectedFragment(CartFragment.TAG);
                 break;
         }
     }
 
-    public void onCartContentsChanged(){
+    public void onCartContentsChanged() {
         mainViewModel.getCarts();
     }
+
 }

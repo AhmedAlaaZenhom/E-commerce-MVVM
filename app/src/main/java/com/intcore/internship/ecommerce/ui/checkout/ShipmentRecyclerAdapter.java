@@ -1,5 +1,6 @@
 package com.intcore.internship.ecommerce.ui.checkout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.intcore.internship.ecommerce.R;
 import com.intcore.internship.ecommerce.data.models.CartItemModel;
 import com.intcore.internship.ecommerce.ui.commonClasses.PicassoHelper;
+import com.intcore.internship.ecommerce.ui.commonClasses.Utils;
 
 import java.util.ArrayList;
 
@@ -20,10 +22,14 @@ public class ShipmentRecyclerAdapter extends RecyclerView.Adapter<ShipmentRecycl
 
     private Context context;
     private ArrayList<CartItemModel> list;
+    private int parentHeight;
+    private boolean isCurrentLocaleAR;
 
-    public ShipmentRecyclerAdapter(Context context, ArrayList<CartItemModel> list) {
-        this.context = context;
+    ShipmentRecyclerAdapter(boolean isCurrentLocaleAR, Activity activity, ArrayList<CartItemModel> list) {
+        this.isCurrentLocaleAR = isCurrentLocaleAR;
+        this.context = activity;
         this.list = list;
+        parentHeight = (int) (Utils.getDisplayMetrics(activity).widthPixels * 0.28);
     }
 
     @NonNull
@@ -58,15 +64,23 @@ public class ShipmentRecyclerAdapter extends RecyclerView.Adapter<ShipmentRecycl
             productNameTV = v.findViewById(R.id.productNameTV);
             productPriceTV = v.findViewById(R.id.productPriceTV);
             quantityTV = v.findViewById(R.id.quantityTV);
+
+            v.findViewById(R.id.parentCV).getLayoutParams().height = parentHeight;
         }
 
         private void bindData(CartItemModel data) {
             PicassoHelper.loadImageWithCache(
-                    PicassoHelper.STORAGE_BASE_URL + data.getProductModel().getDefaultImage(), productIV);
-            productNameTV.setText(data.getProductModel().getNameEN());
+                    PicassoHelper.STORAGE_BASE_URL + data.getProductModel().getDefaultImage(),
+                    productIV,
+                    PicassoHelper.JUST_FIT,
+                    null,
+                    null);
+
+            productNameTV.setText(isCurrentLocaleAR ? data.getProductModel().getNameAR() : data.getProductModel().getNameEN());
             productPriceTV.setText("$" + String.format("%.1f", data.getProductModel().getPrice()));
-            quantityTV.setText(context.getString(R.string.quantity)+" "+String.valueOf(data.getQuantity()));
+            quantityTV.setText(context.getString(R.string.quantity) + " " + String.valueOf(data.getQuantity()));
         }
+
     }
 
 }

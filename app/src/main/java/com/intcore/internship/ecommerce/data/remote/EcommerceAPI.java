@@ -11,11 +11,14 @@ import com.intcore.internship.ecommerce.data.remote.helperModels.deals.DealsPage
 import com.intcore.internship.ecommerce.data.remote.helperModels.favourite.WishListResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.favourite.ToggleFavStateRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.favourite.ToggleFavStateResponseModel;
+import com.intcore.internship.ecommerce.data.remote.helperModels.filter.FilterDataResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.home.HomeResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.login.LoginResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.login.LoginRequestModel;
+import com.intcore.internship.ecommerce.data.remote.helperModels.login.SocialLoginRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.order.OrderRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.order.OrderResponseModel;
+import com.intcore.internship.ecommerce.data.remote.helperModels.products.ProductsResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.profile.ProfileResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.register.RegisterResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.register.RegisterRequestModel;
@@ -46,6 +49,9 @@ public interface EcommerceAPI {
 
     @POST("user/auth/signin")
     Single<Response<LoginResponseModel>> loginUsingEmailAndPassword(@Body LoginRequestModel loginRequestModel);
+
+    @POST("user/auth/social-media-register")
+    Single<Response<LoginResponseModel>> loginUsingSocialMedia(@Body SocialLoginRequestModel socialLoginRequestModel);
 
     @POST("user/auth/signup")
     Single<Response<RegisterResponseModel>> register(@Body RegisterRequestModel registerRequestModel);
@@ -83,6 +89,28 @@ public interface EcommerceAPI {
 
     @GET("user/app/product/{id}")
     Single<Response<ProductModel>> getProduct(@Path("id") int productID, @Query("api_token") String apiToken);
+
+    @GET("user/app/products")
+    Single<Response<ProductsResponseModel>> getProducts(
+            @Query("api_token") String apiToken,
+            @Query("keyword") String keyword,
+            @Query("category_id") Integer categoryID,
+            @Query("sub_category_id") Integer subCategoryID,
+            @Query("brand_id") Integer brandID,
+            @Query("max_price") Integer maxPrice,
+            @Query("min_price") Integer minPrice,
+            // Sort By
+            // 1 ===> new,
+            // 2 ===> popular,
+            // 3 ===> price high to low,
+            // 4 ===> pice low to high
+            @Query("sort_by") Integer sortBy
+    );
+
+    // filter
+
+    @GET("user/app/get-filter")
+    Single<Response<FilterDataResponseModel>> getFilterData(@Query("category_id") Integer categoryID);
 
     // Categories
 

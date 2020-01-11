@@ -2,13 +2,13 @@
 <androidx.appcompat.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/white"
+    android:background="@drawable/background_gradient"
     app:contentInsetStart="0dp"
-    app:contentInsetEnd="0dp">
+    app:contentInsetEnd="0dp"
+    android:animateLayoutChanges="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:id="@+id/toolbarMenuBtn"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
-            android:padding="5dp"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -26,28 +26,29 @@
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:tint="@color/white"/>
 
-        <ImageView
+        <com.intcore.internship.ecommerce.ui.commonClasses.LocalizedImageView
             android:id="@+id/toolbarBackBtn"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
-            android:padding="5dp"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_back"
+            app:srcCompat="@drawable/baseline_arrow_back_white_48"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground"
-            android:tint="@color/black"
+            android:tint="@color/white"
             android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/toolbarConfirmIV"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
-            android:padding="5dp"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -55,27 +56,28 @@
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground"
-            android:tint="@color/black"
+            android:tint="@color/white"
             android:visibility="gone"/>
 
         <TextView
             android:id="@+id/toolbarTitleTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/main_text_color"
+            android:textColor="@color/white"
             android:maxLines="1"
-            android:textSize="18sp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:layout_marginStart="96dp"
             android:layout_marginEnd="96dp"
             android:ellipsize="end"
+            android:fontFamily="@font/sfui_semibold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_default="wrap"/>
 
-        <ImageView
+        <com.intcore.internship.ecommerce.ui.commonClasses.LocalizedImageView
             android:id="@+id/toolbarCartIV"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
@@ -83,10 +85,10 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="13dp"
-            android:tint="@color/black"
+            android:tint="@color/white"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/toolbarSearchIV"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_cart" />
 
@@ -95,11 +97,11 @@
             android:layout_width="14dp"
             android:layout_height="14dp"
             android:background="@drawable/shape_rounded_red_text_view"
-            android:gravity="top|center_horizontal"
+            android:gravity="center"
             android:text="5"
             android:textColor="@color/white"
-            android:textSize="11sp"
-            android:textStyle="bold"
+            android:fontFamily="@font/sfui_medium"
+            android:textSize="10sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/toolbarCartIV"
@@ -109,31 +111,56 @@
             app:layout_constraintVertical_bias="0.13" />
 
         <ImageView
-            android:id="@+id/toolbarSearchIV"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="13dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/search" />
-
-        <ImageView
             android:id="@+id/toolbarCancelIV"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
-            android:padding="15dp"
+            android:padding="17dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/close"
+            android:tint="@color/white"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/toolbarSkipTV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:fontFamily="@font/sfui_medium"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/skip"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/toolbarLogoutTV"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:fontFamily="@font/sfui_medium"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/log_out"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
             android:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

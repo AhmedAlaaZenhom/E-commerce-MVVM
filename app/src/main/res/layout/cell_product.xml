@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/parentCL"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="110dp"
-    android:paddingStart="5dp"
-    android:paddingEnd="5dp"
-    android:layout_height="wrap_content">
+    android:layout_width="128dp"
+    android:layout_height="160dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="100dp"
-        android:layout_height="100dp">
+        android:id="@+id/cardView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="10dp"
+        android:elevation="5dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -19,38 +26,46 @@
                 android:id="@+id/productIV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground"/>
+                android:padding="8dp"/>
 
             <ImageView
                 android:id="@+id/favIV"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:padding="5dp"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground"/>
+                android:padding="5dp" />
+
         </RelativeLayout>
+
     </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/productNameTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="1"
         android:textColor="@color/gray"
-        android:textSize="12sp"
-        android:layout_marginTop="2dp"
-        android:maxLines="1"/>
+        android:textSize="11sp"
+        android:fontFamily="@font/sfui_regular"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        app:layout_constraintBottom_toTopOf="@id/productPriceTV"
+        app:layout_constraintVertical_chainStyle="packed"/>
 
     <TextView
         android:id="@+id/productPriceTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/main_text_color"
-        android:textSize="11sp"
-        android:textStyle="bold"/>
+        android:textSize="10sp"
+        android:fontFamily="@font/sfui_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productNameTV" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

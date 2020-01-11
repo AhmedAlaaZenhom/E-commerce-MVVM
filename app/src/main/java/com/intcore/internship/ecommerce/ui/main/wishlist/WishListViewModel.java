@@ -7,6 +7,7 @@ import com.intcore.internship.ecommerce.R;
 import com.intcore.internship.ecommerce.data.DataManager;
 import com.intcore.internship.ecommerce.data.models.ProductModel;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 
 import java.util.List;
 
@@ -46,11 +47,11 @@ public class WishListViewModel extends BaseViewModel {
                             getProductModelListLD().setValue(response.body().getProductModelList());
                         } else {
                             Log.d(TAG, "GetWishList failure, ErrorBody: " + response.errorBody().toString());
-                            setToastMessagesLD(getApplication().getString(R.string.unknown_error));
+                            setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.unknown_error),ToastsHelper.MESSAGE_TYPE_WARNING));
                         }
                     }, throwable -> {
                         Log.d(TAG, "GetWishList throwable, ThrowableMessage: " + throwable.getMessage());
-                        setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                     }));
         }
     }
@@ -67,18 +68,26 @@ public class WishListViewModel extends BaseViewModel {
                         if (response.isSuccessful()) {
                             Log.d(TAG, "ToggleFavState Success");
                             setProgressLoadingLD(false);
-                            setToastMessagesLD(response.body().getMessage());
+                            String responseMessage = response.body().getMessage() ;
+                            if(responseMessage.contains("removed"))
+                                setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.removed_from_fav),ToastsHelper.MESSAGE_TYPE_SUCCESS));
+                            else
+                                setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.added_to_fav),ToastsHelper.MESSAGE_TYPE_SUCCESS));
                             // Get wish list again to refresh products
                             getWishList();
                         } else {
                             Log.d(TAG, "ToggleFavState failure, ErrorBody: " + response.errorBody().toString());
                             setProgressLoadingLD(false);
-                            setToastMessagesLD(getApplication().getString(R.string.unknown_error));
+                            setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.unknown_error),ToastsHelper.MESSAGE_TYPE_WARNING));
                         }
                     }, throwable -> {
                         Log.d(TAG, "ToggleFavState throwable, ThrowableMessage: " + throwable.getMessage());
-                        setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                     }));
         }
+    }
+
+    public String getSavedLocale() {
+        return dataManager.getSavedLocale();
     }
 }

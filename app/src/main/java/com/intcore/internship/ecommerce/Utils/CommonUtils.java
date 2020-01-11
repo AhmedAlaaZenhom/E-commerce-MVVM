@@ -21,8 +21,4 @@ public class CommonUtils {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    public static float getPxFromDp( Context context , int dp){
-        Resources r = context.getResources();
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-    }
 }

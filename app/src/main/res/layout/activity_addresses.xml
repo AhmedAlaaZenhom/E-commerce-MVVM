@@ -51,7 +51,8 @@
                     android:focusable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@drawable/baseline_add_white_48"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:src="@drawable/baseline_add_white_36"
                     app:fabSize="normal"
                     app:maxImageSize="36dp"/>
 

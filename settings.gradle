@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':stepview'
 rootProject.name='E-commerce'

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.category_brand.CategoriesActivity">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.intcore.internship.ecommerce.ui.category_brand.CategoriesViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categoriesRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"/>
+
+    </LinearLayout>
+
+</layout>

@@ -11,10 +11,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/select_size"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textColor="@color/main_text_color"
-        android:textStyle="bold"
-        android:paddingTop="16dp"/>
+        android:fontFamily="@font/sfui_semibold"
+        android:layout_marginTop="16dp"/>
 
     <LinearLayout
         android:id="@+id/sizesLL"
@@ -27,10 +27,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/select_color"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textColor="@color/main_text_color"
-        android:layout_marginTop="8dp"
-        android:textStyle="bold"/>
+        android:fontFamily="@font/sfui_semibold"
+        android:layout_marginTop="8dp"/>
 
     <LinearLayout
         android:id="@+id/colorsLL"
@@ -50,9 +50,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/quantity"
-            android:textSize="14sp"
+            android:textSize="17sp"
             android:textColor="@color/main_text_color"
-            android:textStyle="bold"/>
+            android:fontFamily="@font/sfui_semibold"/>
 
         <EditText
             android:id="@+id/quantityET"
@@ -71,12 +71,15 @@
     <TextView
         android:id="@+id/addToCartTV"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/black"
-        android:textSize="21sp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/background_gradient"
         android:text="@string/add_to_cart"
         android:textColor="@color/white"
+        android:fontFamily="@font/sfui_medium"
+        android:textSize="18sp"
         android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_marginTop="16dp"/>
 
 

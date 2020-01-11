@@ -45,7 +45,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:menu="@menu/menu_main_bottom_navigation"
                 app:labelVisibilityMode="unlabeled"
-                android:background="@color/white"/>
+                app:itemIconTint="@drawable/selector_bottom_nav_item"
+                android:background="@drawable/background_gradient"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

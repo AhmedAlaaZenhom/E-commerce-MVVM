@@ -1,20 +1,18 @@
 package com.intcore.internship.ecommerce.data.local;
 
 import android.content.Context;
-
-import com.intcore.internship.ecommerce.data.local.helperEntities.home.BestSellerEntity;
+import android.util.Log;
 
 import com.intcore.internship.ecommerce.data.remote.helperModels.home.HomeResponseModel;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
 
 import androidx.room.Room;
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 public class DbHelper {
+
+    private static final String TAG = DbHelper.class.getSimpleName();
 
     private Context applicationContext ;
 
@@ -32,9 +30,10 @@ public class DbHelper {
         return applicationDatabase;
     }
 
-    public boolean insertHomeData(HomeResponseModel homeResponseModel) {
+    public void insertHomeData(HomeResponseModel homeResponseModel) {
+        Log.d(TAG,"insertHomeData");
         if(homeResponseModel==null)
-            return false;
+            return;
         try {
             getApplicationDatabase().productModelDao().insertProducts(homeResponseModel.getNewArrivalModelList());
             getApplicationDatabase().newArrivalDao().deleteAll();
@@ -48,13 +47,12 @@ public class DbHelper {
             getApplicationDatabase().topCategoriesDao().deleteAll();
             getApplicationDatabase().topCategoriesDao().insertTopCategories(homeResponseModel.getTopCategoryEntityList());
 
-            return true ;
         } catch (Exception e){
-            return false ;
+            e.printStackTrace();
         }
     }
 
-    public Observable<HomeResponseModel> getHomeData(){
+    public Observable<HomeResponseModel> getHomeLocalData(){
         return Observable.fromCallable(() -> {
             final HomeResponseModel homeResponseModel = new HomeResponseModel();
             homeResponseModel.setNewArrivalModelList(getApplicationDatabase().newArrivalDao().getNewArrivalProducts());

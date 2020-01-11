@@ -1,6 +1,9 @@
 package com.intcore.internship.ecommerce.data.models;
 
 import com.google.gson.annotations.SerializedName;
+import com.intcore.internship.ecommerce.data.remote.helperModels.order.OrderItemModel;
+
+import java.util.List;
 
 public class OrderModel {
 
@@ -51,6 +54,9 @@ public class OrderModel {
 
     @SerializedName("class_payment")
     private String classPayment ;
+
+    @SerializedName("products")
+    private List<OrderItemModel> orderItemModels;
 
     public Integer getId() {
         return id;
@@ -114,5 +120,9 @@ public class OrderModel {
 
     public String getClassPayment() {
         return classPayment;
+    }
+
+    public List<OrderItemModel> getOrderItemModels() {
+        return orderItemModels;
     }
 }

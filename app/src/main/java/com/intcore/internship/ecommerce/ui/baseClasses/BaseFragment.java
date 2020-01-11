@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.intcore.internship.ecommerce.di.ViewCompositionRoot;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment {
 
@@ -27,6 +29,9 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment {
     public abstract @LayoutRes int getLayoutId();
 
     public abstract BaseViewModel getViewModel();
+
+    @Nullable
+    public abstract SwipeRefreshLayout getSwipeRefreshLayout();
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -52,11 +57,16 @@ public abstract class BaseFragment<T extends ViewDataBinding> extends Fragment {
         };
         mViewModel.getProgressLoadingLD().observe(this,progressLoadingObserver);
 
-        final Observer<String> toastMessagesObserver = message -> {
-            mActivity.toastsHelper.showMessageError(message);
+        final Observer<ToastsHelper.ToastMessage> toastMessagesObserver = message -> {
+            mActivity.toastsHelper.showMessage(message);
         };
         mViewModel.getToastMessagesLD().observe(this,toastMessagesObserver);
 
+        final Observer<Boolean> swipeRefreshLoadingObserver = loading -> {
+            if(getSwipeRefreshLayout()!=null)
+                getSwipeRefreshLayout().setRefreshing(loading);
+        };
+        mViewModel.getSwipeRefreshLoadingLD().observe(this,swipeRefreshLoadingObserver);
     }
 
     @Override

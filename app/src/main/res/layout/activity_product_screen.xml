@@ -21,7 +21,7 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar"/>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -41,9 +41,9 @@
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="15sp"
+                    android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="invisible"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/favIV"
@@ -51,47 +51,55 @@
                     android:layout_height="36dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
-                    android:src="@drawable/selector_favorite"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/selectableItemBackground"/>
+                    android:src="@drawable/selector_favorite"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/productIV"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
                     app:layout_constraintDimensionRatio="H,1:1"
-                    app:layout_constraintEnd_toStartOf="@+id/favIV"
-                    app:layout_constraintStart_toEndOf="@+id/offerTV"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
                     app:layout_constraintTop_toBottomOf="@+id/offerTV" />
 
-                <LinearLayout
-                    android:id="@+id/productImagesLL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="90dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/productIV" />
+                <HorizontalScrollView
+                    android:id="@+id/productImagesSV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fillViewport="true"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintTop_toBottomOf="@+id/productIV">
+
+                    <LinearLayout
+                        android:id="@+id/productImagesLL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal" />
+
+                </HorizontalScrollView>
 
                 <TextView
                     android:id="@+id/productNameTV"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:textColor="@color/main_text_color"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/sfui_medium"
                     app:layout_constraintEnd_toStartOf="@+id/productPriceTV"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/offerTV"
-                    app:layout_constraintTop_toBottomOf="@+id/productImagesLL"
+                    app:layout_constraintTop_toBottomOf="@+id/productImagesSV"
                     app:layout_constraintWidth_default="wrap" />
 
                 <TextView
@@ -100,8 +108,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:textColor="@color/main_text_color"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/sfui_semibold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/productNameTV" />
 
@@ -119,29 +127,47 @@
                     android:id="@+id/productPriceBeforeOfferTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/sfui_semibold"
                     app:layout_constraintBottom_toBottomOf="@+id/productRatingBar"
-                    app:layout_constraintStart_toStartOf="@id/productPriceTV"
                     app:layout_constraintEnd_toEndOf="@id/productPriceTV"
+                    app:layout_constraintStart_toStartOf="@id/productPriceTV"
                     app:layout_constraintTop_toTopOf="@+id/productRatingBar" />
 
                 <TextView
-                    android:id="@+id/productDescriptionTV"
+                    android:id="@+id/productDescriptionITV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
+                    android:text="@string/description"
                     android:textColor="@color/main_text_color"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/sfui_medium"
                     app:layout_constraintStart_toStartOf="@+id/productRatingBar"
                     app:layout_constraintTop_toBottomOf="@+id/productRatingBar" />
+
+                <TextView
+                    android:id="@+id/productDescriptionTV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/sfui_regular"
+                    android:textColor="@color/main_text_color"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/productDescriptionITV"
+                    app:layout_constraintTop_toBottomOf="@+id/productDescriptionITV"
+                    app:layout_constraintWidth_default="wrap"/>
 
                 <TextView
                     android:id="@+id/productCategoryTV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/sfui_medium"
                     app:layout_constraintStart_toStartOf="@+id/productDescriptionTV"
                     app:layout_constraintTop_toBottomOf="@+id/productDescriptionTV" />
 
@@ -150,27 +176,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/sfui_medium"
                     app:layout_constraintStart_toStartOf="@+id/productCategoryTV"
                     app:layout_constraintTop_toBottomOf="@+id/productCategoryTV" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent=".30" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent=".70" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <TextView
             android:id="@+id/addToCartTV"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="@color/black"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@drawable/background_gradient"
             android:text="@string/add_to_cart"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="21sp"
+            android:fontFamily="@font/sfui_medium"
+            android:textSize="18sp"
             android:gravity="center"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"/>
 
     </LinearLayout>
 

@@ -7,6 +7,7 @@ import com.intcore.internship.ecommerce.R;
 import com.intcore.internship.ecommerce.data.DataManager;
 import com.intcore.internship.ecommerce.data.models.AddressModel;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -41,22 +42,25 @@ public class AddAddressViewModel extends BaseViewModel {
             String phoneNumber,
             String notes){
         Log.d(TAG, "Starting AddAddresses call ...");
+        setProgressLoadingLD(true);
         getCompositeDisposable().add(dataManager
                 .addAddress(city, street, building, floor, apartment, landmark, phoneNumber, notes)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
+                    setProgressLoadingLD(false);
                     if (response.isSuccessful()) {
                         Log.d(TAG, "AddAddresses call success ...");
-                        setToastMessagesLD(response.body().getMessage());
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.address_added_successfully),ToastsHelper.MESSAGE_TYPE_SUCCESS));
                         getAddAddressResponseModelLD().setValue(response.body().getAddressModel());
                     } else {
                         Log.d(TAG, "AddAddresses failure: " + response.errorBody().string());
-                        setToastMessagesLD(getApplication().getString(R.string.unknown_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.unknown_error),ToastsHelper.MESSAGE_TYPE_WARNING));
                     }
                 }, throwable -> {
+                    setProgressLoadingLD(false);
                     Log.d(TAG, "AddAddresses throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 }));
     }
 }

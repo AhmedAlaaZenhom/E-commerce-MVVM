@@ -21,8 +21,10 @@ public class SideBarCategoriesAdapter extends RecyclerView.Adapter<SideBarCatego
 
     private ArrayList<CategoryModel> list;
     private ClickListener clickListener;
+    boolean isCurrentLocaleAR;
 
-    public SideBarCategoriesAdapter(ArrayList<CategoryModel> list, ClickListener clickListener) {
+    SideBarCategoriesAdapter(boolean isCurrentLocaleAR, ArrayList<CategoryModel> list, ClickListener clickListener) {
+        this.isCurrentLocaleAR = isCurrentLocaleAR;
         this.list = list;
         this.clickListener = clickListener;
     }
@@ -57,7 +59,7 @@ public class SideBarCategoriesAdapter extends RecyclerView.Adapter<SideBarCatego
         }
 
         private void bindData(CategoryModel data) {
-            categoryNameTV.setText(data.getNameEN());
+            categoryNameTV.setText(isCurrentLocaleAR ? data.getNameAR() : data.getNameEN());
             categoryNameTV.setOnClickListener(v -> {
                 if (clickListener != null)
                     clickListener.onCategoryClicked(data);

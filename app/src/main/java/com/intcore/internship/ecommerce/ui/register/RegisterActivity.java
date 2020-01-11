@@ -1,8 +1,5 @@
 package com.intcore.internship.ecommerce.ui.register;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +15,11 @@ import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
 import com.intcore.internship.ecommerce.ui.login.LoginActivity;
 import com.intcore.internship.ecommerce.ui.main.mainScreen.MainActivity;
 
+import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
 
     public static void startActivity(Context context) {
@@ -27,6 +29,9 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
 
     private ActivityRegisterBinding activityRegisterBinding ;
     private RegisterViewModel registerViewModel ;
+
+    private int activityMode;
+    private String socialID, socialType, socialName, socialEmail;
 
     @Override
     public int getBindingVariable() {
@@ -45,6 +50,12 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
         return registerViewModel;
     }
 
+    @Nullable
+    @Override
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return null;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,18 +71,16 @@ public class RegisterActivity extends BaseActivity<ActivityRegisterBinding> {
     @Override
     protected void setUpObservers() {
         super.setUpObservers();
-        final Observer<UserModel> userModelObserver = userModel -> openActivationActivity();
+        final Observer<UserModel> userModelObserver = userModel -> openMainActivity();
         registerViewModel.getRegisterResponseLD().observe(this,userModelObserver);
     }
 
-    private void openActivationActivity(){
+    private void openMainActivity(){
         MainActivity.startActivity(this);
-        finish();
     }
 
     private void openLoginActivity(){
-        LoginActivity.startActivity(this);
-        finish();
+        onBackPressed();
     }
 
     public void validateAndRegister() {

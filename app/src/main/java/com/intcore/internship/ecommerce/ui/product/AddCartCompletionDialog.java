@@ -16,6 +16,7 @@ import com.intcore.internship.ecommerce.R;
 import com.intcore.internship.ecommerce.Utils.CommonUtils;
 import com.intcore.internship.ecommerce.data.models.ColorModel;
 import com.intcore.internship.ecommerce.data.models.SizeModel;
+import com.intcore.internship.ecommerce.ui.commonClasses.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,9 +114,9 @@ public class AddCartCompletionDialog extends Dialog {
             selectedSizeID = sizeModel.getId();
         final TextView textView = new TextView(getContext());
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                (int) CommonUtils.getPxFromDp(getContext(), 40),
-                (int) CommonUtils.getPxFromDp(getContext(), 40));
-        layoutParams.setMarginStart((index==0)?0:(int) CommonUtils.getPxFromDp(getContext(), 8));
+                (int) Utils.convertDpToPixel(getContext(), 40),
+                (int) Utils.convertDpToPixel(getContext(), 40));
+        layoutParams.setMarginStart((index==0)?0:(int) Utils.convertDpToPixel(getContext(), 8));
         textView.setLayoutParams(layoutParams);
         textView.setAllCaps(true);
         textView.setGravity(Gravity.CENTER);
@@ -138,9 +139,9 @@ public class AddCartCompletionDialog extends Dialog {
             selectedColorID = colorModel.getId();
         final TextView textView = new TextView(getContext());
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                (int) CommonUtils.getPxFromDp(getContext(), 40),
-                (int) CommonUtils.getPxFromDp(getContext(), 40));
-        layoutParams.setMarginStart((index==0)?0:(int) CommonUtils.getPxFromDp(getContext(), 8));
+                (int) Utils.convertDpToPixel(getContext(), 40),
+                (int) Utils.convertDpToPixel(getContext(), 40));
+        layoutParams.setMarginStart((index==0)?0:(int) Utils.convertDpToPixel(getContext(), 8));
         textView.setLayoutParams(layoutParams);
         textView.setAllCaps(true);
         setColorCircleState(textView,colorModel.getColor(),index==0);
@@ -159,7 +160,7 @@ public class AddCartCompletionDialog extends Dialog {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.OVAL);
         shape.setColor(selected?Color.BLACK:Color.WHITE);
-        shape.setStroke((int) CommonUtils.getPxFromDp(getContext(), 1), Color.BLACK);
+        shape.setStroke((int) Utils.convertDpToPixel(getContext(), 1), Color.BLACK);
         textView.setBackground(shape);
         textView.setTextColor(selected?Color.WHITE:Color.BLACK);
     }
@@ -168,7 +169,7 @@ public class AddCartCompletionDialog extends Dialog {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.OVAL);
         shape.setColor(Color.parseColor(color));
-        shape.setStroke(selected?(int) CommonUtils.getPxFromDp(getContext(), 1):0, getContext().getResources().getColor(R.color.off_white));
+        shape.setStroke(selected?(int) Utils.convertDpToPixel(getContext(), 1):0, getContext().getResources().getColor(R.color.off_white));
         textView.setBackground(shape);
     }
 

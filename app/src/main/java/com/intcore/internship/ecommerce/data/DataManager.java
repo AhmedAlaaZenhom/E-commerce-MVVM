@@ -5,10 +5,11 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.provider.Settings;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.intcore.internship.ecommerce.R;
 import com.intcore.internship.ecommerce.data.local.DbHelper;
-import com.intcore.internship.ecommerce.data.local.helperEntities.home.BestSellerEntity;
-import com.intcore.internship.ecommerce.data.local.helperEntities.home.NewArrivalEntity;
-import com.intcore.internship.ecommerce.data.local.helperEntities.home.TopCategoryEntity;
 import com.intcore.internship.ecommerce.data.remote.helperModels.activation.ActivationResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.addresses.AddAddressRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.addresses.AddAddressResponseModel;
@@ -19,11 +20,13 @@ import com.intcore.internship.ecommerce.data.remote.helperModels.deals.DealsPage
 import com.intcore.internship.ecommerce.data.remote.helperModels.favourite.ToggleFavStateRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.favourite.ToggleFavStateResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.favourite.WishListResponseModel;
+import com.intcore.internship.ecommerce.data.remote.helperModels.filter.FilterDataResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.home.HomeResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.login.LoginResponseModel;
 import com.intcore.internship.ecommerce.data.remote.APIsHelper;
 import com.intcore.internship.ecommerce.data.remote.helperModels.order.OrderRequestModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.order.OrderResponseModel;
+import com.intcore.internship.ecommerce.data.remote.helperModels.products.ProductsResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.profile.ProfileResponseModel;
 import com.intcore.internship.ecommerce.data.remote.helperModels.register.RegisterResponseModel;
 import com.intcore.internship.ecommerce.data.models.AddressModel;
@@ -32,15 +35,14 @@ import com.intcore.internship.ecommerce.data.models.OrderModel;
 import com.intcore.internship.ecommerce.data.models.ProductModel;
 import com.intcore.internship.ecommerce.data.sharedPreferences.PreferenceHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -63,6 +65,10 @@ public class DataManager {
 
     public Single<Response<LoginResponseModel>> loginUsingEmailAndPassword(String email, String password) {
         return apIsHelper.loginUsingEmailAndPassword(email, password, getDeviceId());
+    }
+
+    public Single<Response<LoginResponseModel>> loginUsingSocialMedia(String socialID, String socialType) {
+        return apIsHelper.loginUsingSocialMedia(socialID, socialType);
     }
 
     public Single<Response<RegisterResponseModel>> register(String name, String email, String phone, String password) {
@@ -95,6 +101,22 @@ public class DataManager {
 
     public Single<Response<DealsPageResponseModel>> getDealsPage() {
         return apIsHelper.getDealsPage(getUserApiToken());
+    }
+
+    public Single<Response<ProductsResponseModel>> getProducts(
+            @Nullable String keyword,
+            @Nullable Integer categoryID,
+            @Nullable Integer subCategoryID,
+            @Nullable Integer brandID,
+            @Nullable Integer maxPrice,
+            @Nullable Integer minPrice,
+            @Nullable Integer sortBy
+    ) {
+        return apIsHelper.getProducts(getUserApiToken(), keyword, categoryID, subCategoryID, brandID, maxPrice, minPrice, sortBy);
+    }
+
+    public Single<Response<FilterDataResponseModel>> getFilterData(Integer categoryID){
+        return apIsHelper.getFilterData(categoryID);
     }
 
     public Single<Response<ProductModel>> getProduct(int productID) {
@@ -145,12 +167,12 @@ public class DataManager {
     // Mixed Repository
 
     public Observable<HomeResponseModel> getHome() {
-        return Observable.mergeDelayError(
-                dbHelper.getHomeData(),
-                apIsHelper.getHome(getUserApiToken())
-                        .map(response -> (response != null && response.isSuccessful()) ? response.body() : null)
-                        .doOnNext(homeResponseModel -> dbHelper.insertHomeData(homeResponseModel))
-        );
+        return apIsHelper.getHome(getUserApiToken())
+                .map(response -> (response != null && response.isSuccessful()) ? response.body() : null)
+                .doOnNext(homeResponseModel -> dbHelper.insertHomeData(homeResponseModel))
+                .onErrorResumeNext(throwable -> {
+                    return dbHelper.getHomeLocalData();
+                });
     }
 
     // Shared preferences
@@ -179,15 +201,36 @@ public class DataManager {
         return preferenceHelper.getUserApiToken();
     }
 
+    public String getSavedLocale() {
+        return preferenceHelper.getSavedLocale();
+    }
+
+    public void setCurrentLocale(String locale) {
+        preferenceHelper.setCurrentLocale(locale);
+    }
+
     // Device data
 
     private String getDeviceId() {
         return Settings.Secure.getString(applicationContext.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    public void signOutAndExit(Activity activity){
-        ((ActivityManager)activity.getSystemService(ACTIVITY_SERVICE)).clearApplicationUserData();
-        activity.finishAffinity();
+    // Google Auth
+
+    private GoogleSignInClient googleSignInClient;
+
+    public GoogleSignInClient initGoogleLogin(Activity activity) {
+        final GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(activity.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(activity, gso);
+        logoutFromGoogle();
+        return googleSignInClient;
     }
 
+    private void logoutFromGoogle() {
+        if (googleSignInClient != null)
+            googleSignInClient.signOut();
+    }
 }

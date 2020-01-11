@@ -7,8 +7,8 @@ import android.preference.PreferenceManager;
 public class PreferenceHelper {
 
     private static final String LOCALE = "LOCALE";
-    private static final String LOCALE_ARABIC = "ar";
-    private static final String LOCALE_ENGLISH = "en";
+    public static final String LOCALE_ARABIC = "ar";
+    public static final String LOCALE_ENGLISH = "en";
 
     private static final String LOGGED_IN = "LOGGED_IN";
     private static final String USER_ID = "USER_ID";
@@ -68,6 +68,14 @@ public class PreferenceHelper {
 
     public String getUserApiToken(){
         return get(USER_API_TOKEN) ;
+    }
+
+    public void setCurrentLocale(String locale) {
+        save(LOCALE, locale.contains(LOCALE_ARABIC) ? LOCALE_ARABIC : LOCALE_ENGLISH);
+    }
+
+    public String getSavedLocale() {
+        return get(LOCALE);
     }
 
 }

@@ -8,6 +8,7 @@ import com.intcore.internship.ecommerce.data.DataManager;
 import com.intcore.internship.ecommerce.data.remote.helperModels.cart.CartsResponseModel;
 import com.intcore.internship.ecommerce.data.models.AddressModel;
 import com.intcore.internship.ecommerce.ui.baseClasses.BaseViewModel;
+import com.intcore.internship.ecommerce.ui.commonClasses.ToastsHelper;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class CartViewModel extends BaseViewModel {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
+                        setSwipeRefreshLoadingLD(false);
                         if (response.isSuccessful()) {
                             Log.d(TAG,"GetCarts Success") ;
                             getCartItemsLD().setValue(response.body());
@@ -56,8 +58,9 @@ public class CartViewModel extends BaseViewModel {
                             Log.d(TAG, "GetCarts failure: "+response.errorBody().string());
                         }
                     }, throwable -> {
+                        setSwipeRefreshLoadingLD(false);
                         Log.d(TAG, "GetCarts throwable: "+throwable.getMessage());
-                        setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                     })
             );
         }
@@ -81,7 +84,7 @@ public class CartViewModel extends BaseViewModel {
                 }, throwable -> {
                     setProgressLoadingLD(false);
                     Log.d(TAG, "UpdateCartItemQuantity throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 })
         );
     }
@@ -104,7 +107,7 @@ public class CartViewModel extends BaseViewModel {
                 }, throwable -> {
                     setProgressLoadingLD(false);
                     Log.d(TAG, "UpdateCartItemQuantity throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 })
         );
     }
@@ -127,7 +130,7 @@ public class CartViewModel extends BaseViewModel {
                 }, throwable -> {
                     setProgressLoadingLD(false);
                     Log.d(TAG, "RemoveCartItemQuantity throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 })
         );
     }
@@ -146,12 +149,16 @@ public class CartViewModel extends BaseViewModel {
                         getAddressesLD().setValue(response.body());
                     } else {
                         Log.d(TAG, "GetAddresses failure: " + response.errorBody().string());
-                        setToastMessagesLD(getApplication().getString(R.string.unknown_error));
+                        setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                     }
                 }, throwable -> {
                     setProgressLoadingLD(false);
                     Log.d(TAG, "GetAddresses throwable: " + throwable.getMessage());
-                    setToastMessagesLD(getApplication().getString(R.string.connection_error));
+                    setToastMessagesLD(new ToastsHelper.ToastMessage(getApplication().getString(R.string.connection_error),ToastsHelper.MESSAGE_TYPE_ERROR));
                 }));
+    }
+
+    public String getSavedLocale() {
+        return dataManager.getSavedLocale();
     }
 }

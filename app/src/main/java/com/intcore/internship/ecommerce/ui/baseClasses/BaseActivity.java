@@ -1,6 +1,7 @@
 package com.intcore.internship.ecommerce.ui.baseClasses;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.Observer;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatActivity {
 
@@ -31,14 +33,13 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
 
     public abstract BaseViewModel getViewModel();
 
-    /*@Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }*/
+    @Nullable
+    public abstract SwipeRefreshLayout getSwipeRefreshLayout();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         progressHudHelper = getCompositionRoot().getProgressHudHelper() ;
         toastsHelper = getCompositionRoot().getToastsHelper() ;
@@ -73,11 +74,16 @@ public abstract class BaseActivity<T extends ViewDataBinding> extends AppCompatA
         };
         mViewModel.getProgressLoadingLD().observe(this,progressLoadingObserver);
 
-        final Observer<String> toastMessagesObserver = message -> {
-            toastsHelper.showMessageError(message);
+        final Observer<ToastsHelper.ToastMessage> toastMessagesObserver = message -> {
+            toastsHelper.showMessage(message);
         };
         mViewModel.getToastMessagesLD().observe(this,toastMessagesObserver);
 
+        final Observer<Boolean> swipeRefreshLoadingObserver = loading -> {
+            if(getSwipeRefreshLayout()!=null)
+                getSwipeRefreshLayout().setRefreshing(loading);
+        };
+        mViewModel.getSwipeRefreshLoadingLD().observe(this,swipeRefreshLoadingObserver);
     }
 
     protected T getViewDataBinding() {

@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.intcore.internship.ecommerce.ui.addresses.AddAddressViewModel;
 import com.intcore.internship.ecommerce.ui.addresses.AddressesViewModel;
+import com.intcore.internship.ecommerce.ui.category_brand.CategoriesViewModel;
+import com.intcore.internship.ecommerce.ui.category_brand.CategoryBrandViewModel;
 import com.intcore.internship.ecommerce.ui.checkout.CheckoutViewModel;
 import com.intcore.internship.ecommerce.ui.main.cart.CartViewModel;
 import com.intcore.internship.ecommerce.ui.main.deals.DealsViewModel;
@@ -74,6 +76,12 @@ public class ViewModelProviderFactory extends ViewModelProvider.NewInstanceFacto
         } else if (modelClass.isAssignableFrom(OrdersViewModel.class)) {
             //noinspection unchecked
             return (T) new OrdersViewModel(application);
+        } else if (modelClass.isAssignableFrom(CategoryBrandViewModel.class)) {
+            //noinspection unchecked
+            return (T) new CategoryBrandViewModel(application);
+        } else if (modelClass.isAssignableFrom(CategoriesViewModel.class)) {
+            //noinspection unchecked
+            return (T) new CategoriesViewModel(application);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }

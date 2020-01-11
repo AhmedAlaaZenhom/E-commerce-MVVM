@@ -9,20 +9,12 @@ import androidx.lifecycle.MutableLiveData;
 
 public class SplashViewModel extends BaseViewModel {
 
-    private MutableLiveData<Boolean> isLoggedInMood ;
-
-    MutableLiveData<Boolean> getIsLoggedInMood() {
-        if(isLoggedInMood==null)
-            isLoggedInMood = new MutableLiveData<>() ;
-        return isLoggedInMood;
-    }
-
     public SplashViewModel(@NonNull Application application) {
         super(application);
     }
 
-    void decideNextActivity(){
-        getIsLoggedInMood().setValue(getCompositionRoot().getDataManager().isUserLoggedIn());
+    boolean isUserLoggedIn(){
+        return getCompositionRoot().getDataManager().isUserLoggedIn();
     }
 
     @Override
